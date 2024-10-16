@@ -6,6 +6,10 @@ import {
   SynchronizationFailedError,
   TransferFailedError,
 } from '.';
+import { random } from 'lodash';
+
+jest.mock('lodash');
+
 
 describe('BankAccount', () => {
   let account: BankAccount;
@@ -62,28 +66,33 @@ describe('BankAccount', () => {
   });
 
   test('fetchBalance should return number in case if request did not failed', async () => {
-    jest.spyOn(Math, 'random').mockReturnValue(0.5);
+    const account = getBankAccount(0);
+    (random as jest.Mock).mockReturnValue(50);
     const balance = await account.fetchBalance();
 
-    expect(balance).toBeGreaterThanOrEqual(0);
-    expect(balance).toBeLessThanOrEqual(100);
+    expect(balance).toBe(50);
+    expect(typeof balance).toBe('number');
   });
 
   test('should set new balance if fetchBalance returned number', async () => {
-    jest.spyOn(Math, 'random').mockReturnValue(0.8);
+    const account = getBankAccount(0);
+    (random as jest.Mock).mockReturnValue(50);
+
     await account.synchronizeBalance();
 
-    expect(account.getBalance()).toBeGreaterThanOrEqual(0);
-    expect(account.getBalance()).toBeLessThanOrEqual(100);
+    expect(account.getBalance()).toBe(50);
+    expect(random).toHaveBeenCalled();
   });
 
   test('should throw SynchronizationFailedError if fetchBalance returned null', async () => {
-    jest.spyOn(Math, 'random').mockReturnValue(0);
+    const account = getBankAccount(0);
+    (random as jest.Mock).mockReturnValue(null);
+
     await expect(account.synchronizeBalance()).rejects.toThrow(
       SynchronizationFailedError,
     );
-    await expect(account.synchronizeBalance()).rejects.toThrow(
-      'Synchronization failed',
-    );
+
+    expect(account.getBalance()).toBe(0);
+    expect(random).toHaveBeenCalled();
   });
 });
