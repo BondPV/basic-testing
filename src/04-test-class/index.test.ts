@@ -10,7 +10,6 @@ import { random } from 'lodash';
 
 jest.mock('lodash');
 
-
 describe('BankAccount', () => {
   let account: BankAccount;
 

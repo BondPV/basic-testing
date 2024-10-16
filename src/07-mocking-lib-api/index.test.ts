@@ -8,7 +8,7 @@ describe('throttledGetDataFromApi', () => {
   const axiosClient = { get: jest.fn() };
   const path = '/posts';
   const data = [{ id: 1, title: 'Test Post' }];
-  
+
   beforeEach(() => {
     (axios.create as jest.Mock).mockReturnValue(axiosClient);
     (axiosClient.get as jest.Mock).mockResolvedValueOnce({ data });
@@ -24,7 +24,9 @@ describe('throttledGetDataFromApi', () => {
   test('should create instance with provided base url', async () => {
     await throttledGetDataFromApi('/posts');
 
-    expect(axios.create).toHaveBeenCalledWith({ baseURL: 'https://jsonplaceholder.typicode.com'});
+    expect(axios.create).toHaveBeenCalledWith({
+      baseURL: 'https://jsonplaceholder.typicode.com',
+    });
   });
 
   test('should perform request to correct provided url', async () => {

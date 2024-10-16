@@ -6,14 +6,14 @@ describe('generateLinkedList', () => {
   test('should generate linked list from values 1', () => {
     const input = [1, 2, 3];
     const expectedOutput = {
-      "value": 1,
-      "next": {
-        "value": 2,
-        "next": {
-          "value": 3,
-          "next": {
-            "next": null,
-            "value": null,
+      value: 1,
+      next: {
+        value: 2,
+        next: {
+          value: 3,
+          next: {
+            next: null,
+            value: null,
           },
         },
       },
