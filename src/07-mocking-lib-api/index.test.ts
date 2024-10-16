@@ -6,14 +6,12 @@ jest.mock('axios');
 
 describe('throttledGetDataFromApi', () => {
   const axiosClient = { get: jest.fn() };
-  const relativePath = '/posts';
-  const responseData = [{ id: 1, title: 'Test Post' }];
+  const path = '/posts';
+  const data = [{ id: 1, title: 'Test Post' }];
   
   beforeEach(() => {
     (axios.create as jest.Mock).mockReturnValue(axiosClient);
-    (axiosClient.get as jest.Mock).mockResolvedValueOnce({
-      data: responseData,
-    });
+    (axiosClient.get as jest.Mock).mockResolvedValueOnce({ data });
 
     jest.useFakeTimers();
   });
@@ -30,17 +28,17 @@ describe('throttledGetDataFromApi', () => {
   });
 
   test('should perform request to correct provided url', async () => {
-    const result = await throttledGetDataFromApi(relativePath);
+    const result = await throttledGetDataFromApi(path);
 
     jest.runAllTimers();
 
-    expect(axiosClient.get).toHaveBeenCalledWith(relativePath);
-    expect(result).toEqual(responseData);
+    expect(axiosClient.get).toHaveBeenCalledWith(path);
+    expect(result).toEqual(data);
   });
 
   test('should return response data', async () => {
-    const result = await throttledGetDataFromApi(relativePath);
+    const result = await throttledGetDataFromApi(path);
 
-    expect(result).toEqual(responseData);
+    expect(result).toEqual(data);
   });
 });
